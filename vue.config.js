@@ -1,16 +1,8 @@
 const { defineConfig } = require("@vue/cli-service");
-
-const CDN = {
-  css: ["https://unpkg.com/element-plus/dist/index.css"],
-  js: [
-    // "https://unpkg.com/vue@3/dist/vue.global.prod.js", // 生产环境
-    "https://unpkg.com/vue@next",
-    "https://unpkg.com/element-plus",
-    "https://unpkg.com/axios/dist/axios.min.js",
-    "https://unpkg.com/vue-router@4",
-    "https://unpkg.com/vuex@4",
-  ],
-};
+const path = require("path");
+const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
+const DllReferencePlugin = require("webpack/lib/DllReferencePlugin");
 
 module.exports = defineConfig({
   transpileDependencies: true,
@@ -25,20 +17,24 @@ module.exports = defineConfig({
   },
   configureWebpack: (config) => {
     return {
-      externals: {
-        devtool: "nosources-source-map",
-        vue: "Vue",
-        axios: "axios",
-        vuex: "Vuex",
-        "vue-router": "VueRouter",
-        "element-plus": "ElementPlus",
-      },
+      plugins: [
+        new DllReferencePlugin({
+          manifest: require("./build/vendor-manifest.json"),
+        }),
+        new DllReferencePlugin({
+          manifest: require("./build/utils-manifest.json"),
+        }),
+        // 将 dll 注入到 生成的 html 模板中
+        // new HtmlWebpackPlugin(),
+        new AddAssetHtmlPlugin([
+          {
+            filepath: path.resolve(__dirname, "./build/vendor.dll.js"),
+          },
+          {
+            filepath: path.resolve(__dirname, "./build/utils.dll.js"),
+          },
+        ]),
+      ],
     };
-  },
-  chainWebpack: (config) => {
-    config.plugin("html").tap((args) => {
-      args[0].cdn = CDN;
-      return args;
-    });
   },
 });

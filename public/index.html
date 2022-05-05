@@ -6,22 +6,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script> -->
-    <!-- <script src="https://unpkg.com/vue@next"></script>
-    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
-    <script src="https://unpkg.com/element-plus"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/vue-router@4"></script>
-    <script src="https://unpkg.com/vuex@4"></script> -->
-    <!--css样式文件的加载-->
-    <% for (var i in htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.css) { %>
-      <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
-      <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
-    <% } %>
-    <!--js文件的加载-->
-    <% for (let i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
-      <script  src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
-    <% } %>
   </head>
   <body>
     <noscript>
